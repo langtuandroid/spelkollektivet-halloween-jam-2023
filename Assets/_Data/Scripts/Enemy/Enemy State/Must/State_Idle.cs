@@ -16,6 +16,7 @@ public class State_Idle : FsmState<EnemyController>
     {
         base.Reason();
         Context.enemyMovement.Patrolling();
+        if (Context.isPlayerInFieldOfView && !Context.playerInMeleeAttackRange) Machine.ChangeState<State_Chase>();
     }
 
     public override void Act(float deltaTime)

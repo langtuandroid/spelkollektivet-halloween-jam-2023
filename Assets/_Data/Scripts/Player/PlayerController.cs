@@ -64,4 +64,9 @@ public class PlayerController : MonoBehaviour
     {
         _sound.PlayDeathSound();
     }
+
+    public void TakeDamage(int damage)
+    {
+        _health.TakeDamage(damage);
+    }
 }

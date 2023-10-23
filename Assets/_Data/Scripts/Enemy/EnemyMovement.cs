@@ -69,4 +69,20 @@ public class EnemyMovement : MonoBehaviour
             _timeRemaining = Random.Range(2, 7);
         }
     }
+
+    public void ChaseTarget(Transform target)
+    {
+        agent.SetDestination(target.position);
+    }
+
+    public void StopMoving()
+    {
+        agent.isStopped = true;
+        agent.velocity = Vector3.zero;
+    }
+
+    public void StartMoving()
+    {
+        agent.isStopped = false;
+    }
 }

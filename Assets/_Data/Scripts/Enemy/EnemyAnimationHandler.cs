@@ -19,6 +19,6 @@ public class EnemyAnimationHandler : AnimationHandler
 
     public void PlayMeleeAttack()
     {
-        _animator.CrossFade("MeleeAttack", 0.2f);
+        _animator.CrossFade("MeleeAttack", 0.1f);
     }
 }

@@ -9,6 +9,7 @@ public class State_Death : FsmState<EnemyController>
     {
         base.Begin();
         Context.currentState = CurrentState.Death;
+        Context.enemyMovement.StopMoving();
     }
 
     public override void Reason()
