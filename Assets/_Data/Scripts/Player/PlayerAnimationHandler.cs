@@ -2,17 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAnimationHandler : MonoBehaviour
+public class PlayerAnimationHandler : AnimationHandler
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    private int _movementParameter;
 
-    // Update is called once per frame
-    void Update()
+    public override void Initialise()
     {
-        
+        base.Initialise();
+        _movementParameter = Animator.StringToHash("Movement");
     }
 }

@@ -11,4 +11,9 @@ public class AnimationHandler : MonoBehaviour
     {
         _animator = GetComponent<Animator>();
     }
+
+    public virtual void Initialise()
+    {
+
+    }
 }

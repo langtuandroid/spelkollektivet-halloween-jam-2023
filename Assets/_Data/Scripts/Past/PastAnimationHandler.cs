@@ -7,10 +7,9 @@ public class PastAnimationHandler : AnimationHandler
     private int _movementParameter;
 
 
-    protected override void Awake()
+    public override void Initialise()
     {
-        base.Awake();
-
+        base.Initialise();
         _movementParameter = Animator.StringToHash("Movement");
     }
 

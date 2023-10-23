@@ -11,23 +11,18 @@ public class PastController : MonoBehaviour
     [SerializeField] private PastMovement _movement;
     [SerializeField] private PastShooting _shooting;
     [SerializeField] private PastSoundHandler _sound;
-    [SerializeField] private PlayerRecord _playerRecord;
-
-    private List<PositionInTime> _positionInTimes;
-    private int _currentTimeCount = 0;
-    private int _maxTimeCount = 0;
-
+    [SerializeField] private HealthBody _health;
 
 
     private void Awake()
     {
         SetupComponent();
+        InitialiseCalls();
     }
-
-
-    private void FixedUpdate()
+    private void InitialiseCalls()
     {
-        RunTimeLoop();
+        _health.Initialise();
+        _animationHandler.Initialise();
     }
 
     private void SetupComponent()
@@ -36,50 +31,45 @@ public class PastController : MonoBehaviour
         _movement = GetComponent<PastMovement>();
         _shooting = GetComponent<PastShooting>();
         _sound = GetComponent<PastSoundHandler>();
-        _playerRecord = GetComponent<PlayerRecord>();
+        _health = GetComponent<HealthBody>();
+    }
+
+    private void FixedUpdate()
+    {
+        _movement.RunTimeLoop();
     }
 
     public void SetPositionInTime(List<PositionInTime> positionInTimes)
     {
-        _positionInTimes = positionInTimes;
-        _maxTimeCount = _positionInTimes.Count;
-        _currentTimeCount = 0;
+        _movement.SetPositionInTime(positionInTimes);
     }
 
-    private void RunTimeLoop()
+    private void OnEnable()
     {
-        if (_currentTimeCount < _maxTimeCount)
-        {
-            MoveInTime(_currentTimeCount, Time.fixedDeltaTime);
-            if (_currentTimeCount == _maxTimeCount - 1)
-            {
-                ResetGhost();
-            }
-        }
-    }
-
-    private void MoveInTime(int index,float time)
-    {
-        transform.DOMove(_positionInTimes[index].Position, time).SetEase(Ease.Linear);
-        transform.DORotateQuaternion(_positionInTimes[index].Quaternion, time).SetEase(Ease.Linear);
-        _animationHandler.SetMovement(_positionInTimes[index].Velocity.magnitude);
-        _currentTimeCount += 1;
-    }
-
-    private void ResetGhost()
-    {
-        transform.position = _positionInTimes[0].Position;
-        transform.rotation = _positionInTimes[0].Quaternion;
-        _currentTimeCount = 0;
-    }
-
-    private void StopTween()
-    {
-
+        _health.OnHeal += WhenHeal;
+        _health.OnDeath += WhenDeath;
+        _health.OnDamage += WhenDamage;
     }
 
     private void OnDisable()
     {
-        StopTween();
+        _health.OnHeal -= WhenHeal;
+        _health.OnDeath -= WhenDeath;
+        _health.OnDamage -= WhenDamage;
+    }
+
+    private void WhenHeal()
+    {
+        _sound.PlayHealSound();
+    }
+
+    private void WhenDamage()
+    {
+        _sound.PlayDamageSound();
+    }
+
+    private void WhenDeath()
+    {
+        _sound.PlayDeathSound();
     }
 }

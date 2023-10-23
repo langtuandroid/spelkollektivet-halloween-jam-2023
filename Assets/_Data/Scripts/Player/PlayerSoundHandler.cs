@@ -4,15 +4,20 @@ using UnityEngine;
 
 public class PlayerSoundHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    
+
+    public void PlayHealSound()
     {
-        
+
     }
 
-    // Update is called once per frame
-    void Update()
+    public void PlayDamageSound()
     {
-        
+
+    }
+
+    public void PlayDeathSound()
+    {
+
     }
 }

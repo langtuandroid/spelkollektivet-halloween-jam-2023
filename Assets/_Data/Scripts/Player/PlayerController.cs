@@ -11,13 +11,20 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private PlayerMovement _movement;
     [SerializeField] private PlayerSoundHandler _sound;
     [SerializeField] private PlayerAnimationHandler _animationHandler;
+    [SerializeField] private HealthBody _health;
 
     private void Awake()
     {
         SetupComponent();
-        _playerRecord.Initialise(_firstPersonCharacter);
+        InitialiseCalls();
     }
 
+    private void InitialiseCalls()
+    {
+        _playerRecord.Initialise(_firstPersonCharacter);
+        _health.Initialise();
+        _animationHandler.Initialise();
+    }
 
     private void SetupComponent()
     {
@@ -26,5 +33,35 @@ public class PlayerController : MonoBehaviour
         _sound = GetComponent<PlayerSoundHandler>();
         _playerRecord = GetComponent<PlayerRecord>();
         _firstPersonCharacter = GetComponent<CMFirstPersonCharacter>();
+        _health = GetComponent<HealthBody>();
+    }
+
+    private void OnEnable()
+    {
+        _health.OnHeal += WhenHeal;
+        _health.OnDeath += WhenDeath;
+        _health.OnDamage += WhenDamage;
+    }
+
+    private void OnDisable()
+    {
+        _health.OnHeal -= WhenHeal;
+        _health.OnDeath -= WhenDeath;
+        _health.OnDamage -= WhenDamage;
+    }
+
+    private void WhenHeal()
+    {
+        _sound.PlayHealSound();
+    }
+
+    private void WhenDamage()
+    {
+        _sound.PlayDamageSound();
+    }
+
+    private void WhenDeath()
+    {
+        _sound.PlayDeathSound();
     }
 }
