@@ -16,7 +16,7 @@ public class State_Idle : FsmState<EnemyController>
     public override void Reason()
     {
         base.Reason();
-        Context.enemyMovement.Patroling();
+        Context.enemyMovement.Patrolling();
     }
 
     public override void Act(float deltaTime)

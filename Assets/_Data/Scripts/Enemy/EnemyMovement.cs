@@ -23,7 +23,7 @@ public class EnemyMovement : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
     }
 
-    public void Patroling()
+    public void Patrolling()
     {
         if (!walkPointSet) SearchWalkPoint();
 
