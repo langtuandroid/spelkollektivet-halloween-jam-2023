@@ -8,6 +8,7 @@ public class State_MoveToRandomPosition : FsmState<EnemyController>
     public override void Begin()
     {
         base.Begin();
+        Context.enemyMeshRenderer.material = Context.enemyIdleMaterial;
     }
 
     public override void Reason()

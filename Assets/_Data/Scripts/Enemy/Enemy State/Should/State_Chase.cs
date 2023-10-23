@@ -1,18 +1,33 @@
+using Archon.SwissArmyLib.Automata;
+using Archon.SwissArmyLib.Events;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class State_Chase : MonoBehaviour
+public class State_Chase : FsmState<EnemyController>
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Begin()
     {
-        
+        base.Begin();
+        Debug.Log("Chase Starts");
+        Context.enemyMeshRenderer.material = Context.enemyChaseMaterial;
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Reason()
     {
-        
+        base.Reason();
+        Context.enemyMovement.agent.SetDestination(Context.player.transform.position);
+    }
+
+    public override void Act(float deltaTime)
+    {
+        base.Act(deltaTime);
+
+    }
+
+    public override void End()
+    {
+        base.End();
+
     }
 }
