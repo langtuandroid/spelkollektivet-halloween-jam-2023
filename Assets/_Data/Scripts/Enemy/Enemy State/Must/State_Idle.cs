@@ -10,6 +10,7 @@ public class State_Idle : FsmState<EnemyController>
     {
         base.Begin();
         Context.currentState = CurrentState.Idle;
+        Context.enemyMovement.StartMoving();
     }
 
     public override void Reason()

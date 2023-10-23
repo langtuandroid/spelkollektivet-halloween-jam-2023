@@ -17,9 +17,13 @@ public class State_Chase : FsmState<EnemyController>
     {
         base.Reason();
         Context.enemyMovement.ChaseTarget(Context.player.transform);
-        if(Vector3.Distance(Context.transform.position, Context.player.transform.position) <= Context.meleeAttackRange)
+        if(Context.CheckDistance() <= Context.meleeAttackRange)
         {
             Machine.ChangeState<State_MeleeAttack>();
+        }
+        if (Context.CheckDistance() >= Context.maxChasingRange)
+        {
+            Machine.ChangeState<State_Idle>();
         }
     }
 

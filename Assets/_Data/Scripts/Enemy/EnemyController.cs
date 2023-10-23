@@ -19,6 +19,9 @@ public class EnemyController : MonoBehaviour
     public LayerMask fieldOfViewTargetMask;
     public LayerMask fieldOfViewObstructionMask;
 
+    public float maxChasingRange;
+
+
     [Header("Attacking")]
     public float timeBetweenAttacks;
     public float meleeAttackRange;

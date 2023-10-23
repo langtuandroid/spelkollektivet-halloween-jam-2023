@@ -376,6 +376,7 @@ MonoBehaviour:
   fieldOfViewObstructionMask:
     serializedVersion: 2
     m_Bits: 320
+  maxChasingRange: 12
   timeBetweenAttacks: 2
   meleeAttackRange: 1.5
   _curentStateText: {fileID: 8931073963447140864}
