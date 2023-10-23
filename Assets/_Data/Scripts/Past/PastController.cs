@@ -23,6 +23,7 @@ public class PastController : MonoBehaviour
     {
         _health.Initialise();
         _animationHandler.Initialise();
+        _movement.Initialise(_animationHandler);
     }
 
     private void SetupComponent()

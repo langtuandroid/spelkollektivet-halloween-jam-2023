@@ -13,12 +13,20 @@ public class PlayerRecord : MonoBehaviour
     public void Initialise(CMFirstPersonCharacter character)
     {
         _character = character;
-        print("aaa");
     }
 
     private void FixedUpdate()
     {
-        positionInTime.Add(new PositionInTime(transform.position, _character.GetVelocity(), transform.rotation));
+        positionInTime.Add(new PositionInTime(
+            // Player Position
+            transform.position,
+            // Player Velocity
+            _character.GetVelocity(), 
+            // Player Rotation
+            transform.rotation,
+            // Player is ground
+            _character.IsOnGround()
+            ));
     }
 
     private void Update()
