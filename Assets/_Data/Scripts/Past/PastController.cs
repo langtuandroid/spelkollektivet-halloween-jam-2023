@@ -11,6 +11,7 @@ public class PastController : MonoBehaviour
     [SerializeField] private PastMovement _movement;
     [SerializeField] private PastShooting _shooting;
     [SerializeField] private PastSoundHandler _sound;
+    [SerializeField] private PlayerRecord _playerRecord;
 
     private List<PositionInTime> _positionInTimes;
     private int _currentTimeCount = 0;
@@ -35,6 +36,7 @@ public class PastController : MonoBehaviour
         _movement = GetComponent<PastMovement>();
         _shooting = GetComponent<PastShooting>();
         _sound = GetComponent<PastSoundHandler>();
+        _playerRecord = GetComponent<PlayerRecord>();
     }
 
     public void SetPositionInTime(List<PositionInTime> positionInTimes)

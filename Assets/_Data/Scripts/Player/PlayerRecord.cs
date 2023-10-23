@@ -5,14 +5,20 @@ using UnityEngine;
 
 public class PlayerRecord : MonoBehaviour
 {
-    [SerializeField] private CMFirstPersonCharacter character;
-    [SerializeField] private Rigidbody _rigidbody;
+    [SerializeField] private CMFirstPersonCharacter _character;
+
     [SerializeField] private GameObject _prefab;
     private List<PositionInTime> positionInTime = new List<PositionInTime>();
 
+    public void Initialise(CMFirstPersonCharacter character)
+    {
+        _character = character;
+        print("aaa");
+    }
+
     private void FixedUpdate()
     {
-        positionInTime.Add(new PositionInTime(transform.position, character.GetVelocity(), transform.rotation));
+        positionInTime.Add(new PositionInTime(transform.position, _character.GetVelocity(), transform.rotation));
     }
 
     private void Update()
