@@ -15,6 +15,10 @@ public class EnemyAnimationHandler : AnimationHandler
     public void SetMovement(float amount)
     {
         _animator.SetFloat("EnemyMovement", amount);
-        Debug.Log(amount);
+    }
+
+    public void PlayMeleeAttack()
+    {
+        _animator.CrossFade("MeleeAttack", 0.2f);
     }
 }

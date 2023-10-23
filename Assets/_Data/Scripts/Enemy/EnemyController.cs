@@ -9,7 +9,6 @@ using UnityEngine.AI;
 public class EnemyController : MonoBehaviour
 {
     private FiniteStateMachine<EnemyController> _stateMachine;
-    private EnemyAnimationHandler _animationHandler;
 
     [Header("Field of View")]
     [SerializeField] private float _fieldOfViewRadius;
@@ -33,6 +32,7 @@ public class EnemyController : MonoBehaviour
     [HideInInspector] public EnemyMovement enemyMovement;
     [HideInInspector] public bool playerInMeleeAttackRange;
     [HideInInspector] public bool alreadyAttacked;
+    [HideInInspector] public EnemyAnimationHandler animationHandler;
 
     private void Awake()
     {
@@ -56,7 +56,7 @@ public class EnemyController : MonoBehaviour
         enemyMeshRenderer = GetComponentInChildren<MeshRenderer>();
         player = GameObject.FindWithTag("Player");
         enemyMovement = GetComponent<EnemyMovement>();
-        _animationHandler = GetComponentInChildren<EnemyAnimationHandler>();
+        animationHandler = GetComponentInChildren<EnemyAnimationHandler>();
     }
 
     private void DebugText()
@@ -122,7 +122,7 @@ public class EnemyController : MonoBehaviour
 
     private void ChangeAnimation()
     {
-        _animationHandler.SetMovement(enemyMovement.velocity);
+        animationHandler.SetMovement(enemyMovement.velocity);
     }
 }
 
