@@ -1,18 +1,32 @@
+using Archon.SwissArmyLib.Automata;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class State_Idle : MonoBehaviour
+public class State_Idle : FsmState<EnemyController>
 {
-    // Start is called before the first frame update
-    void Start()
+    public override void Begin()
     {
-        
+        base.Begin();
     }
 
-    // Update is called once per frame
-    void Update()
+    public override void Reason()
     {
+        base.Reason();
         
+
+        Machine.ChangeState<State_MoveToRandomPosition>();
+    }
+
+    public override void Act(float deltaTime)
+    {
+        base.Act(deltaTime);
+
+    }
+
+    public override void End()
+    {
+        base.End();
+
     }
 }
