@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public class EnemyMovement : MonoBehaviour
 {
-
+    public float velocity => agent.velocity.normalized.magnitude;
     private EnemyController _enemyController;
     [SerializeField] private LayerMask _groundLayerMask;
     [SerializeField] private LayerMask _playerLayerMask;
@@ -16,7 +16,7 @@ public class EnemyMovement : MonoBehaviour
     public float walkPointRange;
     private float _timeRemaining;
     private bool _timerWorking;
-
+ 
     private void Awake()
     {
         _enemyController = GetComponent<EnemyController>();
@@ -46,7 +46,6 @@ public class EnemyMovement : MonoBehaviour
         float randomX = Random.Range(-walkPointRange, walkPointRange);
 
         walkPoint = new Vector3(_enemyController.transform.position.x + randomX, _enemyController.transform.position.y, _enemyController.transform.position.z + randomZ);
-        Debug.Log(walkPoint);
         if (Physics.Raycast(walkPoint, -_enemyController.transform.up, 2f, _groundLayerMask))
             walkPointSet = true;
     }
@@ -54,6 +53,7 @@ public class EnemyMovement : MonoBehaviour
     private void Update()
     {
         WaitAtWaypoint();
+        //Debug.Log(agent.velocity.normalized.magnitude);
     }
 
     private void WaitAtWaypoint()

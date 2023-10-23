@@ -1,11 +1,16 @@
 using Archon.SwissArmyLib.Automata;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class EnemyController : MonoBehaviour
 {
+    private FiniteStateMachine<EnemyController> _stateMachine;
+    private EnemyAnimationHandler _animationHandler;
+
     [Header("Field of View")]
     [SerializeField] private float _fieldOfViewRadius;
     [Range(0, 360)]
@@ -14,51 +19,58 @@ public class EnemyController : MonoBehaviour
     public LayerMask fieldOfViewTargetMask;
     public LayerMask fieldOfViewObstructionMask;
 
+    [Header("Attacking")]
+    public float timeBetweenAttacks;
+    public float meleeAttackRange;
+
+    [Header("Debugging")]
+    [SerializeField] TMP_Text _curentStateText;
+
     [HideInInspector] public bool isPlayerInFieldOfView;
-
+    [HideInInspector] public CurrentState currentState;
     [HideInInspector] public MeshRenderer enemyMeshRenderer;
-
     [HideInInspector] public GameObject player;
     [HideInInspector] public EnemyMovement enemyMovement;
-
-    //Attacking
-    public float timeBetweenAttacks;
-    [HideInInspector] public bool alreadyAttacked;
-
-    //States
-    public float meleeAttackRange;
     [HideInInspector] public bool playerInMeleeAttackRange;
-
-
-    [Header("State Materials")]
-    public Material enemyIdleMaterial;
-    public Material enemyChaseMaterial;
-    public Material enemyAttackMaterial;
-    public Material enemyDeathMaterial;
-
-    private FiniteStateMachine<EnemyController> _stateMachine;
+    [HideInInspector] public bool alreadyAttacked;
 
     private void Awake()
     {
-        enemyMeshRenderer = GetComponentInChildren<MeshRenderer>();
-        player = GameObject.FindWithTag("Player"); 
-        enemyMovement = GetComponent<EnemyMovement>();
+        SetupComponents();
+    }
+    private void Start()
+    {
+        StartCoroutine(FOVRoutine());
+        RegisterAllStates();
     }
 
     private void Update()
+    {
+        StateLogic();
+        ChangeAnimation();
+        DebugText();
+    }
+
+    private void SetupComponents()
+    {
+        enemyMeshRenderer = GetComponentInChildren<MeshRenderer>();
+        player = GameObject.FindWithTag("Player");
+        enemyMovement = GetComponent<EnemyMovement>();
+        _animationHandler = GetComponentInChildren<EnemyAnimationHandler>();
+    }
+
+    private void DebugText()
+    {
+        _curentStateText.text = currentState.ToString();
+    }
+
+    private void StateLogic()
     {
         _stateMachine.Update(Time.deltaTime);
         if (!isPlayerInFieldOfView && !playerInMeleeAttackRange) _stateMachine.ChangeState<State_Idle>();
         if (isPlayerInFieldOfView && !playerInMeleeAttackRange) _stateMachine.ChangeState<State_Chase>();
         if (isPlayerInFieldOfView && playerInMeleeAttackRange) _stateMachine.ChangeState<State_MeleeAttack>();
     }
-
-    void Start()
-    {
-        StartCoroutine(FOVRoutine());
-        RegisterAllStates();
-    }
-
 
     private void RegisterAllStates()
     {
@@ -108,5 +120,18 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    
+    private void ChangeAnimation()
+    {
+        _animationHandler.SetMovement(enemyMovement.velocity);
+    }
+}
+
+public enum CurrentState
+{
+    Idle,
+    Patrolling,
+    Chase,
+    MeleeAttack,
+    RangeAttack,
+    Death
 }

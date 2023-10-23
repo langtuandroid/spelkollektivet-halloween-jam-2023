@@ -8,7 +8,7 @@ public class State_Death : FsmState<EnemyController>
     public override void Begin()
     {
         base.Begin();
-        Context.enemyMeshRenderer.material = Context.enemyDeathMaterial;
+        Context.currentState = CurrentState.Death;
     }
 
     public override void Reason()

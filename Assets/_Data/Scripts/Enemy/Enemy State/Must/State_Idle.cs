@@ -9,8 +9,7 @@ public class State_Idle : FsmState<EnemyController>
     public override void Begin()
     {
         base.Begin();
-        Context.enemyMeshRenderer.material = Context.enemyIdleMaterial;
-        
+        Context.currentState = CurrentState.Idle;
     }
 
     public override void Reason()

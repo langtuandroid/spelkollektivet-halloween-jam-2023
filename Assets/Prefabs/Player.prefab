@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 111535306329447695}
   serializedVersion: 2
   m_LocalRotation: {x: 0.18977648, y: -0.62123454, z: 0.15857098, w: 0.74357766}
-  m_LocalPosition: {x: 5.25, y: 1.6, z: -3.75}
+  m_LocalPosition: {x: 5.25, y: 1.5999999, z: -3.75}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -125,7 +125,7 @@ GameObject:
   - component: {fileID: 5967572463371135011}
   - component: {fileID: 5882350907911013598}
   - component: {fileID: 5549115213046110832}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ MonoBehaviour:
   _useFlatBaseForGroundChecks: 0
   _collisionLayers:
     serializedVersion: 2
-    m_Bits: 1
+    m_Bits: 385
   _triggerInteraction: 1
   _advanced:
     minMoveDistance: 0
@@ -513,6 +513,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b6cdb44fd3bac04db1f4bd7cd2bfdb8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _animator: {fileID: 0}
 --- !u!1 &4381500247019465037
 GameObject:
   m_ObjectHideFlags: 0
@@ -815,7 +816,7 @@ Transform:
   m_GameObject: {fileID: 8908617812129504498}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.6, z: 0}
+  m_LocalPosition: {x: 0, y: 1.5999999, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
