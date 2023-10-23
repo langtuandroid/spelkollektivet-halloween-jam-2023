@@ -4,7 +4,10 @@ using UnityEngine;
 
 public class BodyPart : MonoBehaviour, IDamageable
 {
+    [SerializeField] private int _damageScale = 1;
     private HealthBody _health;
+
+    public int DamageScale { get => _damageScale; set => _damageScale = value; }
 
     public void SetHealth(HealthBody health)
     {
@@ -13,6 +16,6 @@ public class BodyPart : MonoBehaviour, IDamageable
 
     public void TakeDamage(int damageAmount)
     {
-        _health.TakeDamage(damageAmount);
+        _health.TakeDamage(damageAmount * _damageScale);
     }
 }
