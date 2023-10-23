@@ -29,7 +29,7 @@ public class HealthBody : MonoBehaviour, IDamageable,IHealable
     public void TakeDamage(int damageAmount)
     {
         _currentHealth -= damageAmount;
-        if (_currentHealth < 0)
+        if (_currentHealth <= 0)
         {
             OnDeath?.Invoke();
         }

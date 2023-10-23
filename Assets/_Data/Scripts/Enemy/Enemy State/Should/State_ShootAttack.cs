@@ -8,7 +8,7 @@ public class State_ShootAttack : FsmState<EnemyController>
     public override void Begin()
     {
         base.Begin();
-        Context.enemyMeshRenderer.material = Context.enemyAttackMaterial;
+        Context.currentState = CurrentState.RangeAttack;
     }
 
     public override void Reason()

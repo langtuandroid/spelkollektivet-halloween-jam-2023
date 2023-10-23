@@ -1,11 +1,16 @@
 using Archon.SwissArmyLib.Automata;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
+
 public class EnemyController : MonoBehaviour
 {
+    private FiniteStateMachine<EnemyController> _stateMachine;
+
     [Header("Field of View")]
     [SerializeField] private float _fieldOfViewRadius;
     [Range(0, 360)]
@@ -14,51 +19,79 @@ public class EnemyController : MonoBehaviour
     public LayerMask fieldOfViewTargetMask;
     public LayerMask fieldOfViewObstructionMask;
 
+    [Header("Attacking")]
+    public float timeBetweenAttacks;
+    public float meleeAttackRange;
+
+    [Header("Debugging")]
+    [SerializeField] TMP_Text _curentStateText;
+
     [HideInInspector] public bool isPlayerInFieldOfView;
-
+    [HideInInspector] public CurrentState currentState;
     [HideInInspector] public MeshRenderer enemyMeshRenderer;
-
     [HideInInspector] public GameObject player;
     [HideInInspector] public EnemyMovement enemyMovement;
-
-    //Attacking
-    public float timeBetweenAttacks;
-    [HideInInspector] public bool alreadyAttacked;
-
-    //States
-    public float meleeAttackRange;
     [HideInInspector] public bool playerInMeleeAttackRange;
-
-
-    [Header("State Materials")]
-    public Material enemyIdleMaterial;
-    public Material enemyChaseMaterial;
-    public Material enemyAttackMaterial;
-    public Material enemyDeathMaterial;
-
-    private FiniteStateMachine<EnemyController> _stateMachine;
+    [HideInInspector] public bool alreadyAttacked;
+    [HideInInspector] public EnemyAnimationHandler enemyAnimationHandler;
+    [HideInInspector] public HealthBody _health;
+    [HideInInspector] public RagDoll _ragDoll;
+    [HideInInspector] public EnemySoundHandler _sound;
+    [HideInInspector] public bool _isAlive;
+    [HideInInspector] public EnemyAnimationEventHandler enemyEventHandler;
 
     private void Awake()
     {
-        enemyMeshRenderer = GetComponentInChildren<MeshRenderer>();
-        player = GameObject.FindWithTag("Player"); 
-        enemyMovement = GetComponent<EnemyMovement>();
+        SetupComponents();
     }
-
-    private void Update()
-    {
-        _stateMachine.Update(Time.deltaTime);
-        if (!isPlayerInFieldOfView && !playerInMeleeAttackRange) _stateMachine.ChangeState<State_Idle>();
-        if (isPlayerInFieldOfView && !playerInMeleeAttackRange) _stateMachine.ChangeState<State_Chase>();
-        if (isPlayerInFieldOfView && playerInMeleeAttackRange) _stateMachine.ChangeState<State_MeleeAttack>();
-    }
-
-    void Start()
+    private void Start()
     {
         StartCoroutine(FOVRoutine());
         RegisterAllStates();
     }
 
+    private void Update()
+    {
+        StateLogic();
+        ChangeAnimation();
+        DebugText();
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            _health.TakeDamage(1);
+        }
+    }
+
+    private void SetupComponents()
+    {
+        enemyMeshRenderer = GetComponentInChildren<MeshRenderer>();
+        player = GameObject.FindWithTag("Player");
+        enemyMovement = GetComponent<EnemyMovement>();
+        enemyAnimationHandler = GetComponentInChildren<EnemyAnimationHandler>();
+        _health = GetComponent<HealthBody>();
+        _sound = GetComponent<EnemySoundHandler>();
+        _ragDoll = GetComponentInChildren<RagDoll>();
+        enemyEventHandler = GetComponentInChildren<EnemyAnimationEventHandler>();
+
+        enemyEventHandler.Initialize(player.GetComponent<PlayerController>());
+    }
+
+    public float CheckDistance()
+    {
+        return Vector3.Distance(player.transform.position, transform.position);
+    }
+
+    private void DebugText()
+    {
+        _curentStateText.text = currentState.ToString();
+    }
+
+    private void StateLogic()
+    {
+        _stateMachine.Update(Time.deltaTime);
+        //if (!isPlayerInFieldOfView && !playerInMeleeAttackRange) _stateMachine.ChangeState<State_Idle>();
+        
+        //if (isPlayerInFieldOfView && playerInMeleeAttackRange) _stateMachine.ChangeState<State_MeleeAttack>();
+    }
 
     private void RegisterAllStates()
     {
@@ -108,5 +141,51 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    
+    private void ChangeAnimation()
+    {
+        enemyAnimationHandler.SetMovement(enemyMovement.velocity);
+    }
+
+    private void OnEnable()
+    {
+        _health.OnHeal += WhenHeal;
+        _health.OnDeath += WhenDeath;
+        _health.OnDamage += WhenDamage;
+    }
+
+    private void OnDisable()
+    {
+        _health.OnHeal -= WhenHeal;
+        _health.OnDeath -= WhenDeath;
+        _health.OnDamage -= WhenDamage;
+    }
+
+    private void WhenHeal()
+    {
+        _sound.PlayHealSound();
+    }
+
+    private void WhenDamage()
+    {
+        _sound.PlayDamageSound();
+    }
+
+    private void WhenDeath()
+    {
+        _stateMachine.ChangeState<State_Death>();
+        _sound.PlayDeathSound();
+        _isAlive = false;
+        _ragDoll.ActivateRagdoll(true);
+    }
+
+}
+
+public enum CurrentState
+{
+    Idle,
+    Patrolling,
+    Chase,
+    MeleeAttack,
+    RangeAttack,
+    Death
 }

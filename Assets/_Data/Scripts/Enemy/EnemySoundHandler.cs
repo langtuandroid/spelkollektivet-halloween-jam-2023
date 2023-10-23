@@ -1,18 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySoundHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    internal void PlayDamageSound()
     {
         
     }
 
-    // Update is called once per frame
-    void Update()
+    internal void PlayDeathSound()
     {
         
     }
+
+    internal void PlayHealSound()
+    {
+        
+    }
+
 }
