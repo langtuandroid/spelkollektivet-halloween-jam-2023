@@ -12,7 +12,9 @@ public class PastController : MonoBehaviour
     [SerializeField] private PastShooting _shooting;
     [SerializeField] private PastSoundHandler _sound;
     [SerializeField] private HealthBody _health;
+    [SerializeField] private RagDoll _ragDoll;
 
+    private bool _isAlive;
 
     private void Awake()
     {
@@ -21,14 +23,17 @@ public class PastController : MonoBehaviour
     }
     private void InitialiseCalls()
     {
+        _isAlive = true;
         _health.Initialise();
         _animationHandler.Initialise();
         _movement.Initialise(_animationHandler);
+        _ragDoll.Initialise();
     }
 
     private void SetupComponent()
     {
         _animationHandler = GetComponentInChildren<PastAnimationHandler>();
+        _ragDoll = GetComponentInChildren<RagDoll>();
         _movement = GetComponent<PastMovement>();
         _shooting = GetComponent<PastShooting>();
         _sound = GetComponent<PastSoundHandler>();
@@ -37,7 +42,18 @@ public class PastController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        _movement.RunTimeLoop();
+        if (_isAlive)
+        {
+            _movement.RunTimeLoop();
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.J))
+        {
+            _health.TakeDamage(500);
+        }
     }
 
     public void SetPositionInTime(List<PositionInTime> positionInTimes)
@@ -72,5 +88,7 @@ public class PastController : MonoBehaviour
     private void WhenDeath()
     {
         _sound.PlayDeathSound();
+        _isAlive = false;
+        _ragDoll.ActivateRagdoll(true);
     }
 }
