@@ -11,7 +11,7 @@ public class EnemyAnimationEventHandler : MonoBehaviour
 
     private void Awake()
     {
-        _enemyController = GetComponent<EnemyController>();
+        _enemyController = GetComponentInParent<EnemyController>();
     }
 
     private void MeleeAttackEvent()
