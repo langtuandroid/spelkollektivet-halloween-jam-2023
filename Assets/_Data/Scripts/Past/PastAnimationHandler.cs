@@ -2,17 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PastAnimationHandler : MonoBehaviour
+public class PastAnimationHandler : AnimationHandler
 {
-    // Start is called before the first frame update
-    void Start()
+    private int _movementParameter;
+
+
+    protected override void Awake()
     {
-        
+        base.Awake();
+
+        _movementParameter = Animator.StringToHash("Movement");
     }
 
-    // Update is called once per frame
-    void Update()
+    public void SetMovement(float amount)
     {
-        
+        _animator.SetFloat(_movementParameter, amount);
+        Debug.Log(amount);
     }
 }
